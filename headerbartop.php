@@ -49,19 +49,6 @@ class HeaderBar
 		add_action( 'admin_enqueue_scripts',array( $this, 'enqueue' ) );
 	}
 	
-	function activation()
-	{
-		//generated a CPT
-		//flush rewrite rules
-		flush_rewrite_rules();
-	}
-
-	function deactivation()
-	{
-		//flush rewrite rules
-		flush_rewrite_rules();
-	}
-
 	function custom_post_type()
 	{
 		register_post_type( 'headertop',['public' => true, 'label' => 'HeaderTop'] );
@@ -80,9 +67,12 @@ if ( class_exists ( 'HeaderBar' ) ) {
 	$headerBar->register();
 }
 
+// Require once
+
 //activation
-register_activation_hook(__FILE__,array($headerBar,'activation'));
+require_once plugin_dir_path( __FILE__ ) . 'inc/ens-activate.php';
+register_activation_hook(__FILE__,array( 'EnsActivate', 'activate'));
 
 //deactivation
-register_deactivation_hook(__FILE__,array($headerBar,'deactivation'));
-//Uninstall
+require_once plugin_dir_path( __FILE__ ) . 'inc/ens-deactivate.php';
+register_deactivation_hook(__FILE__,array( 'EnsDeactivate','deactivate'));
